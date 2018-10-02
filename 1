@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <iostream>
+#include <math.h>
+#define g 9.8
+using namespace std;
+void movparabolico(int v0, int pos0, int ang, int t);
+
+
+int main()
+{
+int a=0;
+cout<<"Digite 1 para calcular el movimiento parabolico"<<endl;
+cout<<"Digite 2 para calcular el movimiento parabolico con friccion"<<endl;
+cout<<"Digite 3 para calcular una colision elastica"<<endl;
+cout<<"Digite 4 para calcular rebotes"<<endl;
+cin>>a;
+cout<<a<<endl;
+switch(a)
+{
+ case 1:
+ 
+ break;
+ case 2:
+ 
+ break;
+ case 3:
+ 
+ break;
+ case 4:
+ 
+ break;
+ default:
+ std::cout<<"Opcion no valida"<<std::endl;
+ break;
+}
+    
+movparabolico(20, 50, 45, 10);
+
+
+    return 0;
+}
+
+void movparabolico(int v0, int pos0, int ang, int t)
+{float x, y, vx, vy=0;
+    
+ x= v0*cos(ang)*t;
+ y= pos0+(v0*sin(ang)*t)-0.5*g*pow(t,2);
+ vx=v0*cos(ang);
+ vy=v0*sin(ang)-(g*t);
+ 
+ std::cout<<"la posicion en x es "<<x<<std::endl;
+ std::cout<<"la posicion en y es "<<y<<std::endl;
+ std::cout<<"la velocidad en x es "<<vx<<std::endl;
+ std::cout<<"la velocidad en y es "<<vy<<std::endl;
+}
