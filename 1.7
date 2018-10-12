@@ -1,0 +1,178 @@
+#include <stdio.h>
+#include <iostream>
+#include <math.h>
+#define g 9.8
+#define pi 3.14159
+using namespace std;
+
+void mov_parabolico(int v0, int pos0, int ang, int t);
+void choque_elastico(int m1, int m2, float vi1, float vi2);
+void rebote(float h, int masa);
+
+int main()
+{
+int a, v0, pos0, ang, t=0;
+int m1, m2, h, masa=0;
+float vi1,vi2=0;
+
+cout<<"Digite 1 para calcular movimiento parabolico"<<endl;
+cout<<"Digite 2 para calcular colision elastica"<<endl;
+cout<<"Digite 3 para calcular rebotes"<<endl;
+cin>>a;
+
+switch(a)
+{
+ case 1:
+ cout<<"Digite la velocidad inicial"<<endl;
+ cin>>v0;
+ cout<<"Digite la posicion inicial"<<endl;
+ cin>>pos0;
+ cout<<"Digite el angulo"<<endl;
+ cin>>ang;
+ cout<<"Digite el tiempo"<<endl;
+ cin>>t;
+ mov_parabolico(v0, pos0, ang, t);
+ break;
+
+ 
+ case 2:
+ cout<<"Digite la masa de la particula 1"<<endl;
+ cin>>m1;
+  cout<<"Digite la masa de la particula 2"<<endl;
+ cin>>m2;
+  cout<<"Digite la velocidad inicial de la particula 1"<<endl;
+ cin>>vi1;
+ cout<<"Digite la velocidad inicial de la particula 2"<<endl;
+ cin>>vi2;
+ choque_elastico(m1, m2, vi1, vi2);
+ break;
+ 
+ 
+ case 3:
+ cout<<"Digite la altura"<<endl;
+ cin>>h;
+ cout<<"Digite la masa"<<endl;
+ cin>>masa;
+ rebote(h, masa);
+ break;
+ 
+ default:
+ std::cout<<"Opcion no valida"<<std::endl;
+ break;
+}
+    
+    return 0;
+}
+
+void mov_parabolico(int v0, int pos0, int ang, int t)
+{
+float x, y, vx, vy, k, v, theta, ax, ay, vxa, vya=0;
+ int rad, m, b, n=0;
+ n=t;
+ cout<<"Para calcular el movimiento parabolico sin friccion elija 0"<<endl;
+ cout<<"Para calcular el movimiento parabolico con friccion elija 1"<<endl;
+ cin>>b;
+ 
+ if(b==0)    //mov_parabolico sin friccion
+ {
+    for(t=0;t<=n;++t)
+ {
+ x= v0*cos(ang*pi/180)*t;   //ecuacion para calcular posicion en x sin friccion
+ y= pos0+(v0*sin(ang*pi/180)*t)- 0.5*g*pow(t,2);//ecuacion para calcular posicion en y sin friccion
+ vx=v0*cos(ang*pi/180);   //ecuacion para calcular velocidad en x sin friccion
+ vy=v0*sin(ang*pi/180)-(g*t);  //ecuacion para calcular velocidad en y sin friccion
+ 
+ cout<<"En tiempo= "<<t<<endl;
+ cout<<"la posicion en x es "<<x<<endl;
+ cout<<"la posicion en y es "<<y<<endl;
+ cout<<"la velocidad en x es "<<vx<<endl;
+ cout<<"la velocidad en y es "<<vy<<endl;
+ cout<<endl;
+ }
+ }
+ else if(b==1)  //mov_parabolico con friccion
+ {
+  cout<<"Digite el valor de la constante de friccion"<<endl;
+  cin>>k;
+  cout<<"Digite el radio de la particula"<<endl;
+  cin>>rad;
+  cout<<"Digite la masa de la particula"<<endl;
+  cin>>m;
+  
+     for(t=0;t<=n;++t)
+  {
+ vx=v0*cos(ang*pi/180);  //velocidad en x sin friccion
+ vy=v0*sin(ang*pi/180)-(g*t); //velocidad en y sin friccion
+ v=sqrt(pow(vx,2)+pow(vy,2));  //magnitud de la velocidad
+ theta=atan(vx/vy)*180/pi;   //angulo de la velocidad
+ ax= -(((k*pow(v,2)*pow(rad,2))/m)*cos(theta*pi/180));  //aceleracion en x
+ ay= -(((k*pow(v,2)*pow(rad,2))/m)*sin(theta*pi/180))-g;  //aceleracion en y
+ 
+ x= v0*cos(ang*pi/180)*t + 0.5*ax*pow(t,2);  //posicion en x con aceleracion
+ y= pos0+(v0*sin(ang*pi/180)*t)+ 0.5*ay*pow(t,2); //posicion en y con aceleracion
+ vxa=v0*cos(ang*pi/180)+ax*t;  //velocidad en x con aceleracion
+ vya=v0*sin(ang*pi/180)+ay*t;  //velocidad en y con aceleracion
+ 
+ cout<<"En tiempo= "<<t<<endl;
+ cout<<"La magnitud de la velocidad es "<<v<<endl;
+ cout<<"El angulo theta es "<<theta<<endl;
+ cout<<"La aceleracion en x es "<<ax<<endl;
+ cout<<"La aceleracion en y es "<<ay<<endl;
+ cout<<"la posicion en x es "<<x<<endl;
+ cout<<"la posicion en y es "<<y<<endl;
+ cout<<"la velocidad en x es "<<vxa<<endl;
+ cout<<"la velocidad en y es "<<vya<<endl;
+ cout<<endl;
+ }
+ }
+ else
+  std::cout<<"Opcion no valida"<<std::endl;   
+}
+
+
+void choque_elastico(int m1, int m2, float vi1, float vi2)
+{
+float vf1, vf2=0;
+
+if(vi2==0 && vi1>0)  //si la masa 2 esta en reposo y la 1 en movimiento
+{
+ vf1=(m1-m2)*vi1/(m1+m2);
+ vf2=2*m1*vi1/(m1+m2);
+cout<<"la velocidad final de m1 es "<<vf1<<endl;
+cout<<"la velocidad final de m2 es "<<vf2<<endl;
+}
+else if(vi1==0 && vi2<0) //si la masa 1 esta en reposo y la 2 en movimiento
+{
+ vf1=2*m2*vi2/(m1+m2); 
+ vf2=(m2-m1)*vi2/(m1+m2);
+cout<<"la velocidad final de m1 es "<<vf1<<endl;
+cout<<"la velocidad final de m2 es "<<vf2<<endl;
+}
+
+else if((vi1>0 && vi2<0)||(vi1<0 && vi2<vi1)||(vi2>0 && vi1>vi2))//las dos en movimiento
+{
+ vf1=((m1-m2)*vi1/(m1+m2))+(2*m2*vi2/(m1+m2));  
+ vf2=(2*m1*vi1/(m1+m2))-((m1-m2)*vi2/(m1+m2));
+ cout<<"la velocidad final de m1 es "<<vf1<<endl;
+ cout<<"la velocidad final de m2 es "<<vf2<<endl;
+}
+else
+cout<<"no hubo choque elastico "<<endl; //cuando no colisionan
+}
+
+
+void rebote(float h, int masa)
+{
+float e =0.8;
+int n=0;
+float alt[80];
+alt[n]=h;
+
+while(alt[n]>0.01)
+{
+++n;
+alt[n]=pow(e,(2*n))*h;
+cout<<"rebote:"<<n<<" altura "<<alt[n]<<endl;
+}
+
+}
